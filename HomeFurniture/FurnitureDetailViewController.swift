@@ -40,9 +40,14 @@ class FurnitureDetailViewController: UIViewController {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let selectedImage = info[.originalImage] as? UIImage else { return }
+        let data = selectedImage.jpegData(compressionQuality: 9)
+        furniture?.imageData = data
+        
+        
         
         photoImageView.image = selectedImage
         dismiss(animated: true, completion: nil) // what is completion and what is it for? Who are you and who do you work for!?
+        updateView()
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -81,7 +86,12 @@ class FurnitureDetailViewController: UIViewController {
     }
     
 
-    @IBAction func actionButtonTapped(_ sender: Any) {
+    @IBAction func actionButtonTapped(_ sender: UIButton) {
+        guard let image = photoImageView.image else { return }
+        let activityController = UIActivityViewController(activityItems: [image, furniture?.description],  applicationActivities: nil)
+        activityController.popoverPresentationController?.sourceView = sender
+        present(activityController, animated: true, completion: nil)
+        
         
     }
     
